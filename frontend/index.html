@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BFHL — Node Hierarchy Analyzer</title>
+  <meta name="description" content="Bajaj Finserv Full Stack Challenge — Analyze hierarchical node relationships with a visual REST API frontend." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-glow bg-glow-3"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="10" r="4" fill="url(#grad)" />
+            <circle cx="10" cy="28" r="4" fill="url(#grad)" />
+            <circle cx="30" cy="28" r="4" fill="url(#grad)" />
+            <line x1="20" y1="14" x2="10" y2="24" stroke="url(#grad)" stroke-width="2" />
+            <line x1="20" y1="14" x2="30" y2="24" stroke="url(#grad)" stroke-width="2" />
+            <defs><linearGradient id="grad" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="#6366f1" /><stop offset="100%" stop-color="#a855f7" />
+            </linearGradient></defs>
+          </svg>
+        </div>
+        <div>
+          <h1>BFHL Hierarchy Analyzer</h1>
+          <p class="subtitle">Node Relationship &amp; Tree Construction Engine</p>
+        </div>
+      </div>
+      <div class="badge">REST API</div>
+    </header>
+
+    <!-- Input -->
+    <section class="card" id="input-section">
+      <div class="card-header">
+        <div class="card-icon">📥</div>
+        <div>
+          <h2>Input Nodes</h2>
+          <p>Enter node relationships in <code>X-&gt;Y</code> format, separated by commas</p>
+        </div>
+      </div>
+      <div class="input-group">
+        <textarea id="nodeInput" placeholder='e.g. A->B, A->C, B->D, C->E, E->F, X->Y, Y->Z, Z->X' rows="4"></textarea>
+        <div class="input-hint">
+          <span class="hint-icon">💡</span>
+          Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to submit &middot; X and Y must be single uppercase letters (A–Z)
+        </div>
+      </div>
+      <div class="actions">
+        <button id="submitBtn" class="btn btn-primary" onclick="submitData()">
+          <span class="btn-icon">🚀</span> Analyze Hierarchy
+        </button>
+        <button class="btn btn-secondary" onclick="loadExample()">
+          <span class="btn-icon">📋</span> Load Example
+        </button>
+        <button class="btn btn-ghost" onclick="clearAll()">
+          <span class="btn-icon">🗑️</span> Clear
+        </button>
+      </div>
+    </section>
+
+    <!-- API Config -->
+    <section class="card config-section">
+      <div class="card-header">
+        <div class="card-icon">⚙️</div>
+        <div><h2>API Endpoint</h2><p>Auto-detected from current origin</p></div>
+      </div>
+      <div class="config-row">
+        <span class="method-badge">POST</span>
+        <input type="text" id="apiUrl" class="config-input" />
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>Processing hierarchy…</p>
+    </div>
+
+    <!-- Error -->
+    <div id="error" class="error-banner hidden">
+      <span class="error-icon">⚠️</span>
+      <span id="errorText"></span>
+      <button class="error-close" onclick="hideError()">✕</button>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="hidden">
+      <section class="summary-grid" id="summaryGrid"></section>
+
+      <section class="card" id="identitySection">
+        <div class="card-header"><div class="card-icon">👤</div><h2>Identity</h2></div>
+        <div class="identity-grid" id="identityGrid"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-header"><div class="card-icon">🌳</div><h2>Hierarchies</h2></div>
+        <div class="hierarchies-container" id="hierarchiesContainer"></div>
+      </section>
+
+      <div class="two-col">
+        <section class="card">
+          <div class="card-header"><div class="card-icon">❌</div><h2>Invalid Entries</h2></div>
+          <div id="invalidList" class="tag-list"></div>
+        </section>
+        <section class="card">
+          <div class="card-header"><div class="card-icon">🔁</div><h2>Duplicate Edges</h2></div>
+          <div id="duplicateList" class="tag-list"></div>
+        </section>
+      </div>
+
+      <section class="card">
+        <div class="card-header">
+          <div class="card-icon">{ }</div><h2>Raw JSON Response</h2>
+          <button class="btn btn-ghost btn-sm" onclick="copyJSON()"><span class="btn-icon">📋</span> Copy</button>
+        </div>
+        <pre id="rawJSON" class="json-block"></pre>
+      </section>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Built for Bajaj Finserv Health — Full Stack Engineering Challenge</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
